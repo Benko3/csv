@@ -1,0 +1,51 @@
+using System;
+using System.IO;
+using System.Windows.Forms;
+
+namespace UserRegistrationApp
+{
+    public partial class Form1 : Form
+    {
+        public Form1()
+        {
+            InitializeComponent();
+        }
+
+        private void btnSave_Click(object sender, EventArgs e)
+        {
+            // Provjera unosa
+            if (string.IsNullOrWhiteSpace(txtFirstName.Text) ||
+                string.IsNullOrWhiteSpace(txtLastName.Text) ||
+                string.IsNullOrWhiteSpace(txtBirthYear.Text) ||
+                string.IsNullOrWhiteSpace(txtEmail.Text))
+            {
+                MessageBox.Show("Molimo vas da unesete sva polja.");
+                return;
+            }
+
+            // Formatiranje podataka za zapis u .csv
+            string userData = $"{txtFirstName.Text},{txtLastName.Text},{txtBirthYear.Text},{txtEmail.Text}";
+
+            try
+            {
+                // Upis podataka u .csv datoteku
+                using (StreamWriter writer = new StreamWriter("korisnici.csv", true))
+                {
+                    writer.WriteLine(userData);
+                }
+
+                MessageBox.Show("Podaci su uspješno spremljeni.");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Došlo je do greške prilikom spremanja podataka: {ex.Message}");
+            }
+
+            // Poništi unose nakon spremanja
+            txtFirstName.Text = "";
+            txtLastName.Text = "";
+            txtBirthYear.Text = "";
+            txtEmail.Text = "";
+        }
+    }
+}
